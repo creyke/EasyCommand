@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EasyCommand.AspNetCore
 {
@@ -20,6 +21,8 @@ namespace EasyCommand.AspNetCore
                 command.SetController((ControllerBase)that);
             }
 
+            await ExecuteBeforeCommand(); 
+
             return await command.ExecuteExternalAsync(default(TRequest));
         }
 
@@ -30,13 +33,25 @@ namespace EasyCommand.AspNetCore
                 command.SetController((ControllerBase)that);
             }
 
+            await ExecuteBeforeCommand();
+
             return await command.ExecuteExternalAsync(request);
         }
 
-        public static TCommand Command<TCommand>(this object that)
-            where TCommand : IAsyncCommand
+        public static TCommand Command<TCommand>(this object that) where TCommand : IAsyncCommand
         {
             return Scope.ServiceProvider.GetService<TCommand>();
+        }
+
+        private static async Task ExecuteBeforeCommand()
+        {
+            var allExecutingBefore = Scope.ServiceProvider.GetServices<IRunBeforeCommand>()?.ToArray() ?? new IRunBeforeCommand[0];
+
+            if (allExecutingBefore.Any())
+            {
+                await Task.WhenAll(allExecutingBefore.Select(executingBefore =>
+                    executingBefore.BeforeExecutionOfCommand()));
+            }
         }
     }
 }
