@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>Implementation of EasyCommand with helper methods for AspNet.Core</Description>
+    <Authors>OddsBods</Authors>
+    <Company>OddsBods</Company>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/odds-bods/EasyCommand/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/odds-bods/EasyCommand/tree/master/EasyCommand.Examples.AspNetCore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/odds-bods/EasyCommand</RepositoryUrl>
+    <PackageTags>easycommand oddsbods asp.net core</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
