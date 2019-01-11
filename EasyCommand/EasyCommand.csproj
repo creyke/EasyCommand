@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>OddsBods</Authors>
+    <Company>OddsBods</Company>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/odds-bods/EasyCommand/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/odds-bods/EasyCommand/tree/master/EasyCommand</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/odds-bods/EasyCommand</RepositoryUrl>
+    <PackageTags>command oddsbods</PackageTags>
+    <Description>Data models for EasyCommand</Description>
   </PropertyGroup>
 
 </Project>
