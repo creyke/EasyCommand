@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using EasyCommand.AspNetCore.Exceptions;
 
 namespace EasyCommand.AspNetCore
 {
@@ -60,12 +61,12 @@ namespace EasyCommand.AspNetCore
             {
                 result = await command.ExecuteExternalAsync(request);
             }
-            catch (Exception e)
+            catch
             {
                 var message = $"Failed to run  Execute on {handlers[handlerIndex].GetType()}";
                 await RunHandlersAfterMethods
                           (handlers, commandType, result, handlerIndex, message);
-                throw new Exception(message, e);
+                throw;
             }
             finally
             {
@@ -100,13 +101,14 @@ namespace EasyCommand.AspNetCore
                 }
                 catch (Exception e)
                 {
-                    var message = $"Failed to run  BeforeExecutionAsync on {handlers[i].GetType()}";
+                    var message = $"Failed to run aBeforeExecutionAsync on {handlers[i].GetType()}";
 
                     var result = default(TResult);
 
                     await RunHandlersAfterMethods
                            (handlers, command, result, handlerIndex, message);
-                    throw new Exception(message, e);
+
+                    throw HandlerExecutionException.CreateWhenFailedBeforeCommandExecution(command, handlers[i].GetType(),e);
                 }
             }
         }
@@ -124,7 +126,7 @@ namespace EasyCommand.AspNetCore
                 }
                 catch (Exception e)
                 {
-                    throw new Exception($"Unable to execute AfterExecutionAsync on {handlers[i].GetType()} {(hasAdditionalInformation ? $"after {additionalFailureInformation}" : null)}", e);
+                    throw HandlerExecutionException.CreateWhenFailedAfterCommandExecution(command, handlers[i].GetType(), e);
                 }
             }
         }
